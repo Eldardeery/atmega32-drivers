@@ -1,47 +1,75 @@
 /*
- * SPI_Module.h
+ * ATMEGA32_SPI.h
  *
- *  Created on: Sep 5, 2021
- *      Author: dardeery
- */
+ * Created: 9/30/2021 12:00:08 PM
+ *  Author: dardeery
+ */ 
 
-#ifndef SPI_MODULE_H_
-#define SPI_MODULE_H_
 
+#ifndef ATMEGA32_SPI_H_
+#define ATMEGA32_SPI_H_
+
+#include <avr/io.h>
 #include "gpio.h"
 
 
-#define SPR0				0	//bits 0&1 used to config the freq
-#define CPHA				2	//bits 2&3 used to config the transfer mode
-#define MSTR				4	//bit  4   used to config the driver mode
-#define	DORD				5	//bit  5   used to config the data order
-#define SPE					6	//bit  6   used to enable the driver
-#define SPIE				7	//bit  7   used to enable the driver interrupts
-#define ENABLE				1
-#define SPIF				7
+typedef enum
+{
+	SPI_Enable,
+	SPI_Disable,
+}SPI_Control;
+typedef enum 
+{
+	SPI_Master_Mode,
+	SPI_Slave_Mode,
+	}SPI_Mode;
+	
 
-//SPI_PINS according to the atmega32,otherwise..edit this
-#define MOSI		5
-#define MISO		6
-#define SCK			7
-#define SS			4
+	
+typedef enum
+{
+	SPI_Clock_Mode0,
+	SPI_Clock_Mode1,
+	SPI_Clock_Mode2,
+	SPI_Clock_Mode3,
+}SPI_Clock_Mode;
+typedef enum
+{
+	FCPU_By2,
+	FCPU_By4,
+	FCPU_By8,
+	FCPU_By16,
+	FCPU_By32,
+	FCPU_By64,
+	FCPU_By128,
+	}SPI_FReq;
+	
+typedef enum
+{
+	SPI_Intrrupt_Enable,
+	SPI_Intrrupt_Disable,
+	}SPI_Intrrupt;
+	
+typedef enum
+{
+	SPI_Msb,
+	SPI_Lsb,
+	}SPI_DtaOrder;	
+	
+	
+typedef struct
+{
+	SPI_Control             spi_Conrtol;
+	SPI_Mode                spi_Select_Mode;
+	SPI_Clock_Mode          spi_Clck_Mode;
+	SPI_FReq                spi_Clock_Freq;
+	SPI_DtaOrder            spi_data_order;
+	SPI_Intrrupt            spi_Interrupt;
+}SPI_Configuration_Struct;
 
 
-#define SPCR	*(volatile uint8*)0x2D
-#define SPSR	*(volatile uint8*)0x2E
-#define SPDR	*(volatile uint8*)0x2F
 
-typedef enum{
-	SPI_MSTR,
-	SPI_SLV,
-}SPI_OP_MODE;
-
-void Spi_Init(SPI_OP_MODE MODE);
-void Spi_Mstr_Send(uint8 data);
-uint8 Spi_Mstr_Recieve();
-
-
-void Spi_Slave_Send(uint8 data);
-uint8 Spi_Slave_Recieve();
-
-#endif /* SPI_MODULE_H_ */
+void SPI_Init(SPI_Configuration_Struct * SPI_Object);
+uint8 SPI_ReadWrite_ByteBlocking(uint8 data);
+uint8 SPI_ReadWrite_ByteNonBlocking(uint8 data);
+#endif /* ATMEGA32_SPI_H_ */
