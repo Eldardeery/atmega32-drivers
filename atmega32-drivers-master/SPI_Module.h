@@ -4,7 +4,15 @@
  * Created: 9/30/2021 12:00:08 PM
  *  Author: dardeery
  */ 
-
+/*                 EX
+SPI_Configuration_Struct * spi_eeprom ={SPI_Enable,
+					SPI_Master_Mode,
+					FCPU_By4,
+					SPI_Clock_Mode3,
+					SPI_Msb,
+					SPI_Intrrupt_Disable
+					};	
+					*/
 
 #ifndef ATMEGA32_SPI_H_
 #define ATMEGA32_SPI_H_
